@@ -23,6 +23,7 @@
 
 <script>
 import moment from 'moment';
+import localForage from 'localForage';
 
 export default {
     name: 'app',
@@ -63,7 +64,11 @@ export default {
         },
         saveActivity: function() {
             this.history.push({start: this.activity.start, end: this.activity.end});
-            this.$localstore.setItem("timetrackr", JSON.stringify({history: this.history}));
+            var history = [];
+            for (var i = 0; i < this.history.length; i++) {
+                history.push({start: this.history[i].start, end: this.history[i].start});
+            }
+            localForage.setItem("timetrackr", {history});
         },
         refreshCurrentTime: function() {
             this.display = moment().format("HH:mm:ss");
@@ -95,13 +100,11 @@ export default {
         this.refreshFunction = setInterval(function() {
             refreshFunction();
         }, 500);
-        var state = this.$localstore.getItem("timetrackr");
-        if (state) {
-            //this.history = [];
-            console.log(state);
-        } else {
-            this.$localstore.setItem("timetrackr", JSON.stringify({history: []}));
-        }
+        localForage.getItem("timetrackr").then(function(state) {
+            this.history = state.history;
+        }).catch(function(error) {
+            localForage.setItem("timetrackr", JSON.stringify({history: []}));
+        });
     }
 }
 </script>
