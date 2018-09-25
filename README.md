@@ -20,6 +20,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 ## Roadmap
 
 - [x] Replace localStorage with localForage
+- [ ] Replace momentjs with date-fns
 - [ ] Move data persistence and loading to own module
 - [ ] Move data to Vuex store
 - [ ] Decompose app in several components

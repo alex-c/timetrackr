@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import moment from 'moment';
+import dateFns from 'date-fns';
 import localForage from 'localForage';
 
 export default {
@@ -35,7 +35,7 @@ export default {
             },
             history: [],
             format: "D.MM.YYYY HH:mm",
-            display: moment().format("HH:mm:ss"),
+            display: dateFns.format(new Date(), "HH:mm:ss"),
             refreshFunction: null
         }
     },
