@@ -19,8 +19,7 @@ npm run build
 
 TODOs:
 
-- [ ] Better display of durations (currently `{n} seconds`)
-    - [ ] Check out `date-fns`
+- [x] Better display of durations
 - [ ] Display tracked time for today
 - [ ] Move state to Vuex
     - [ ] Persist state to Web Storage
