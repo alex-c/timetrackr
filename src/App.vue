@@ -66,9 +66,12 @@
 </template>
 
 <script>
+import formatDurationMixin from './mixins/formatDuration.js';
+
 export default {
     name: 'app',
     components: {},
+    mixins: [formatDurationMixin],
     data: function() {
         return {
             date: '',
@@ -105,7 +108,7 @@ export default {
                 self.updateTime();
                 if (self.state == 1) {
                     let trackedDurationInSeconds = parseInt((Date.now() - self.tracking.start) / 1000);
-                    self.display = trackedDurationInSeconds + ' seconds'
+                    self.display = self.formatDuration(trackedDurationInSeconds)
                 }
             }, 1000);
         },
@@ -125,7 +128,7 @@ export default {
                 date: new Date().toLocaleDateString(),
                 start: new Date(tracking.start).toLocaleTimeString(),
                 stop: new Date(tracking.stop).toLocaleTimeString(),
-                duration: parseInt((tracking.stop - tracking.start) / 1000) + ' seconds'
+                duration: this.formatDuration(parseInt((tracking.stop - tracking.start) / 1000))
             }
             this.history.unshift(historyEntry);
         },
