@@ -28,3 +28,5 @@ TODOs:
 - [ ] Only display last n entries in history
     - [ ] Offer option to review full history
 - [ ] Analyze history: tracked time per day/week/month
+- [ ] Host on Github pages
+    - [ ] Add Github page link in navbar
