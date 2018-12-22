@@ -34,43 +34,18 @@
                 <span id="tracking-display">{{display}}</span>
                 <button class="button" @click="toggleTracking">{{state == 0 ? "Start tracking" : "Stop tracking"}}</button>
             </div>
-            <div id="history">
-                <div id="history-header">
-                    <span id="history-title">History</span>
-                    <button class="button is-small" @click="clearHistory">
-                        <span class="icon is-small"><i class="fas fa-trash"></i></span>
-                        <span>Clear</span>
-                    </button>
-                </div>
-                <table class="table is-fullwidth">
-                    <thead>
-                        <tr>
-                            <td>Date</td>
-                            <td>Started tracking</td>
-                            <td>Stopped tracking</td>
-                            <td>Time tracked</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="entry in history">
-                            <td>{{entry.date}}</td>
-                            <td>{{entry.start}}</td>
-                            <td>{{entry.stop}}</td>
-                            <td>{{entry.duration}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <History></History>
         </div>
     </div>
 </template>
 
 <script>
 import formatDurationMixin from './mixins/formatDuration.js';
+import History from './components/History.vue';
 
 export default {
-    name: 'app',
-    components: {},
+    name: 'App',
+    components: {History},
     mixins: [formatDurationMixin],
     data: function() {
         return {
@@ -82,9 +57,6 @@ export default {
     computed: {
         state: function() {
             return this.$store.state.state;
-        },
-        history: function() {
-            return this.$store.state.history.slice(0, 10);
         }
     },
     mounted: function() {
@@ -133,9 +105,6 @@ export default {
                 duration: this.formatDuration(parseInt((tracking.stop - tracking.start) / 1000))
             }
             this.$store.commit('addEntryToHistory', historyEntry);
-        },
-        clearHistory: function() {
-            this.$store.commit('clearHistory');
         }
     }
 }
@@ -145,7 +114,6 @@ export default {
 @import "./assets/colorscheme.scss";
 @import "bulma/sass/utilities/_all.sass";
 @import "bulma/sass/elements/button.sass";
-@import "bulma/sass/elements/table.sass";
 @import "bulma/sass/components/navbar.sass";
 
 body {
@@ -210,30 +178,5 @@ body {
 
 #timetrackr button {
     float: right;
-}
-
-#history {
-    margin-top: 40px;
-}
-
-#history-header {
-    margin-bottom: 4px;
-}
-
-#history-header button {
-    float: right;
-    position: relative;
-    bottom: -3px;
-}
-
-#history-title {
-    font-size: 24px;
-    text-shadow: 1px 1px 1px black;
-}
-
-.table {
-    font-size: 14px;
-    color: #5C5C5C;
-    box-shadow: 1px 1px 2px 1px grey;
 }
 </style>
