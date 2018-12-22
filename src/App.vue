@@ -127,7 +127,7 @@ export default {
                 stop: new Date(tracking.stop).toLocaleTimeString(),
                 duration: parseInt((tracking.stop - tracking.start) / 1000) + ' seconds'
             }
-            this.history.push(historyEntry);
+            this.history.unshift(historyEntry);
         },
         clearHistory: function() {
             this.history = [];
