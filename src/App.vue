@@ -76,13 +76,15 @@ export default {
         return {
             date: '',
             time: '',
-            state: 0,
-            display: '',
-            tracking: {
-                start: '',
-                stop: ''
-            },
-            history: []
+            display: ''
+        }
+    },
+    computed: {
+        state: function() {
+            return this.$store.state.state;
+        },
+        history: function() {
+            return this.$store.state.history.slice(0, 10);
         }
     },
     mounted: function() {
@@ -107,20 +109,20 @@ export default {
             setInterval(function() {
                 self.updateTime();
                 if (self.state == 1) {
-                    let trackedDurationInSeconds = parseInt((Date.now() - self.tracking.start) / 1000);
+                    let trackedDurationInSeconds = parseInt((Date.now() - self.$store.state.tracking.start) / 1000);
                     self.display = self.formatDuration(trackedDurationInSeconds)
                 }
             }, 1000);
         },
         toggleTracking: function() {
             if (this.state == 0) {
-                this.tracking.start = Date.now();
-                this.state = 1;
+                this.$store.state.tracking.start = Date.now();
+                this.$store.state.state = 1;
             } else if (this.state == 1) {
-                this.tracking.stop = Date.now();
-                this.pushToHistory(this.tracking);
+                this.$store.state.tracking.stop = Date.now();
+                this.$store.state.state = 0
+                this.pushToHistory(this.$store.state.tracking);
                 this.display = '';
-                this.state = 0
             }
         },
         pushToHistory: function(tracking) {
@@ -130,10 +132,10 @@ export default {
                 stop: new Date(tracking.stop).toLocaleTimeString(),
                 duration: this.formatDuration(parseInt((tracking.stop - tracking.start) / 1000))
             }
-            this.history.unshift(historyEntry);
+            this.$store.commit('addEntryToHistory', historyEntry);
         },
         clearHistory: function() {
-            this.history = [];
+            this.$store.commit('clearHistory');
         }
     }
 }

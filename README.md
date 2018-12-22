@@ -21,10 +21,10 @@ TODOs:
 
 - [x] Better display of durations
 - [ ] Display tracked time for today
-- [ ] Move state to Vuex
+- [x] Move state to Vuex
     - [ ] Persist state to Web Storage
     - [ ] Decompose UI in different components
-- [ ] Only display last n entries in history
+- [x] Only display last n entries in history
     - [ ] Offer option to review full history
 - [ ] Analyze history: tracked time per day/week/month
 - [ ] Host on Github pages
