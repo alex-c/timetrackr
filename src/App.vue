@@ -89,10 +89,10 @@ export default {
         toggleTracking: function() {
             if (this.state == 0) {
                 this.$store.state.tracking.start = Date.now();
-                this.$store.state.state = 1;
+                this.$store.commit('setTrackingState', 1);
             } else if (this.state == 1) {
                 this.$store.state.tracking.stop = Date.now();
-                this.$store.state.state = 0
+                this.$store.commit('setTrackingState', 0);
                 this.pushToHistory(this.$store.state.tracking);
                 this.display = '';
             }

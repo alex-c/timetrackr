@@ -22,7 +22,7 @@ TODOs:
 - [x] Better display of durations
 - [ ] Display tracked time for today
 - [x] Move state to Vuex
-    - [ ] Persist state to Web Storage
+    - [x] Persist state to Web Storage
     - [x] Decompose UI in different components
 - [x] Only display last n entries in history
     - [ ] Offer option to review full history
