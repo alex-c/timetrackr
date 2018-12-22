@@ -31,10 +31,16 @@
             <div id="timetrackr">
                 <span class="icon is-large"><i class="far fa-clock fa-2x"></i></span>
                 <span id="time">{{time}}</span>
-                <button class="button">Start</button>
+                <button class="button" @click="toggleTracking">{{state == 0 ? "Start tracking" : "Stop tracking"}}</button>
             </div>
             <div id="history">
-                <div id="history-title">History</div>
+                <div id="history-header">
+                    <span id="history-title">History</span>
+                    <button class="button is-small" @click="clearHistory">
+                        <span class="icon is-small"><i class="fas fa-trash"></i></span>
+                        <span>Clear</span>
+                    </button>
+                </div>
                 <table class="table is-fullwidth">
                     <thead>
                         <tr>
@@ -45,11 +51,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>28.11.2019</td>
-                            <td>08:50</td>
-                            <td>12:12</td>
-                            <td>3:22</td>
+                        <tr v-for="entry in history">
+                            <td>{{entry.date}}</td>
+                            <td>{{entry.start}}</td>
+                            <td>{{entry.stop}}</td>
+                            <td>{{entry.duration}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -65,7 +71,13 @@ export default {
     data: function() {
         return {
             date: '',
-            time: ''
+            time: '',
+            state: 0,
+            tracking: {
+                start: '',
+                stop: ''
+            },
+            history: []
         }
     },
     mounted: function() {
@@ -88,8 +100,37 @@ export default {
         startTimeUpdateLoop: function() {
             var self = this;
             setInterval(function() {
-                self.updateTime();
+                if (self.state == 1) {
+                    let now = Date.now();
+                    let trackedDurationInSeconds = parseInt((now - self.tracking.start) / 1000);
+                    self.time = trackedDurationInSeconds + ' seconds'
+                } else {
+                    self.updateTime();
+                }
             }, 1000);
+        },
+        toggleTracking: function() {
+            if (this.state == 0) {
+                this.tracking.start = Date.now();
+                this.state = 1;
+            } else if (this.state == 1) {
+                this.state = 0
+                this.tracking.stop = Date.now();
+                this.pushToHistory(this.tracking);
+                this.updateTime();
+            }
+        },
+        pushToHistory: function(tracking) {
+            var historyEntry = {
+                date: new Date().toLocaleDateString(),
+                start: new Date(tracking.start).toLocaleTimeString(),
+                stop: new Date(tracking.stop).toLocaleTimeString(),
+                duration: parseInt((tracking.stop - tracking.start) / 1000) + ' seconds'
+            }
+            this.history.push(historyEntry);
+        },
+        clearHistory: function() {
+            this.history = [];
         }
     }
 }
@@ -156,10 +197,19 @@ body {
     margin-top: 40px;
 }
 
+#history-header {
+    margin-bottom: 4px;
+}
+
+#history-header button {
+    float: right;
+    position: relative;
+    bottom: -3px;
+}
+
 #history-title {
     font-size: 24px;
     text-shadow: 1px 1px 1px black;
-    margin-bottom: 4px;
 }
 
 .table {
