@@ -2,8 +2,9 @@
     <div id="app">
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-                <div class="navbar-item">
-                    <span class="icon is-large"><i class="far fa-clock fa-2x"></i></span>
+                <div class="navbar-item" >
+                    <span id="navbar-title-icon" class="icon is-large"><i class="far fa-clock fa-2x"></i></span>
+                    <span id="navbar-title">timetrackr</span>
                 </div>
                 <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                     <span aria-hidden="true"></span>
@@ -26,11 +27,11 @@
         <div id="content-container">
             <div id="header">
                 timetrackr
-                <span id="date">{{date}}</span>
+                <span id="datetime">{{time}} / {{date}}</span>
             </div>
             <div id="timetrackr">
                 <span class="icon is-large"><i class="far fa-clock fa-2x"></i></span>
-                <span id="time">{{time}}</span>
+                <span id="tracking-display">{{display}}</span>
                 <button class="button" @click="toggleTracking">{{state == 0 ? "Start tracking" : "Stop tracking"}}</button>
             </div>
             <div id="history">
@@ -73,6 +74,7 @@ export default {
             date: '',
             time: '',
             state: 0,
+            display: '',
             tracking: {
                 start: '',
                 stop: ''
@@ -100,12 +102,10 @@ export default {
         startTimeUpdateLoop: function() {
             var self = this;
             setInterval(function() {
+                self.updateTime();
                 if (self.state == 1) {
-                    let now = Date.now();
-                    let trackedDurationInSeconds = parseInt((now - self.tracking.start) / 1000);
-                    self.time = trackedDurationInSeconds + ' seconds'
-                } else {
-                    self.updateTime();
+                    let trackedDurationInSeconds = parseInt((Date.now() - self.tracking.start) / 1000);
+                    self.display = trackedDurationInSeconds + ' seconds'
                 }
             }, 1000);
         },
@@ -114,10 +114,10 @@ export default {
                 this.tracking.start = Date.now();
                 this.state = 1;
             } else if (this.state == 1) {
-                this.state = 0
                 this.tracking.stop = Date.now();
                 this.pushToHistory(this.tracking);
-                this.updateTime();
+                this.display = '';
+                this.state = 0
             }
         },
         pushToHistory: function(tracking) {
@@ -155,6 +155,20 @@ body {
     box-shadow: 0px 1px 5px 3px #ACACAC;
 }
 
+#navbar-title {
+    color: $color-dark;
+    font-size: 36px;
+    text-shadow: 1px 1px 1px black;
+    position: relative;
+    top: -4px;
+}
+
+#navbar-title-icon {
+    color: $color-dark;
+    text-shadow: 1px 1px 1px black;
+    margin-right: 6px;
+}
+
 #content-container {
     width: 600px;
     padding-top: 60px;
@@ -167,7 +181,7 @@ body {
     text-shadow: 1px 1px 1px black;
 }
 
-#date {
+#datetime {
     float: right;
     font-size: 24px;
     position: relative;
@@ -177,13 +191,13 @@ body {
 #timetrackr {
     background: $color-dark;
     border-radius: 3px;
-    padding: 10px;
+    padding: 20px;
     overflow: auto;
     color: white;
     box-shadow: 1px 1px 2px 0px black;
 }
 
-#time {
+#tracking-display {
     margin-left: 14px;
     position: relative;
     top: -6px;
