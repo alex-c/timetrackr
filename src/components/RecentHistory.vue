@@ -27,7 +27,7 @@
                     <td>{{entry.date}}</td>
                     <td>{{entry.start}}</td>
                     <td>{{entry.stop}}</td>
-                    <td>{{entry.duration}}</td>
+                    <td>{{formatDuration(entry.duration)}}</td>
                 </tr>
             </tbody>
         </table>

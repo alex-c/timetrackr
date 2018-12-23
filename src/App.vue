@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import calculateDurationMixin from '../mixins/calculateDuration.js';
+import calculateDurationMixin from './mixins/calculateDuration.js';
 import formatDurationMixin from './mixins/formatDuration.js';
 import Timetrackr from './components/Timetrackr.vue';
 

@@ -73,7 +73,7 @@ export default {
                 date: new Date().toLocaleDateString(),
                 start: new Date(tracking.start).toLocaleTimeString(),
                 stop: new Date(tracking.stop).toLocaleTimeString(),
-                duration: this.formatDuration(parseInt((tracking.stop - tracking.start) / 1000))
+                duration: parseInt((tracking.stop - tracking.start) / 1000)
             }
             this.$store.commit('addEntryToHistory', historyEntry);
         }
