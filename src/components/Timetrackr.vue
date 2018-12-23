@@ -14,13 +14,14 @@
 </template>
 
 <script>
+import calculateDurationMixin from '../mixins/calculateDuration.js';
 import formatDurationMixin from '../mixins/formatDuration.js';
 import RecentHistory from './RecentHistory.vue';
 
 export default {
     name: 'Timetrackr',
     components: {RecentHistory},
-    mixins: [formatDurationMixin],
+    mixins: [calculateDurationMixin, formatDurationMixin],
     data: function() {
         return {
             date: '',
@@ -35,7 +36,13 @@ export default {
     },
     mounted: function() {
         this.updateDateAndTime(new Date());
-        this.startTimeUpdateLoop();
+        var self = this;
+        setInterval(function() {
+            self.updateTime();
+            if (self.state == 1) {
+                self.display = self.formatDuration(self.calculateDuration(self.$store.state.tracking.start))
+            }
+        }, 1000);
     },
     methods: {
         updateDate: function(date) {
@@ -49,16 +56,6 @@ export default {
         updateDateAndTime: function(date) {
             this.updateDate(date);
             this.updateTime(date);
-        },
-        startTimeUpdateLoop: function() {
-            var self = this;
-            setInterval(function() {
-                self.updateTime();
-                if (self.state == 1) {
-                    let trackedDurationInSeconds = parseInt((Date.now() - self.$store.state.tracking.start) / 1000);
-                    self.display = self.formatDuration(trackedDurationInSeconds)
-                }
-            }, 1000);
         },
         toggleTracking: function() {
             if (this.state == 0) {

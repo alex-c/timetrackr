@@ -39,12 +39,13 @@
 </template>
 
 <script>
+import calculateDurationMixin from '../mixins/calculateDuration.js';
 import formatDurationMixin from './mixins/formatDuration.js';
 import Timetrackr from './components/Timetrackr.vue';
 
 export default {
     name: 'App',
-    mixins: [formatDurationMixin],
+    mixins: [calculateDurationMixin, formatDurationMixin],
     data: function() {
         return {
             display: ''
@@ -54,8 +55,7 @@ export default {
         var self = this;
         setInterval(function() {
             if (self.displayTracking()) {
-                let trackedDurationInSeconds = parseInt((Date.now() - self.$store.state.tracking.start) / 1000);
-                self.display = self.formatDuration(trackedDurationInSeconds)
+                self.display = self.formatDuration(self.calculateDuration(self.$store.state.tracking.start))
             }
         }, 1000);
     },
