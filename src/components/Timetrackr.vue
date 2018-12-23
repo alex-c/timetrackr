@@ -7,7 +7,16 @@
         <div id="timetrackr-ctrl">
             <span class="icon is-large"><i class="far fa-clock fa-2x"></i></span>
             <span id="tracking-display">{{display}}</span>
-            <button class="button" @click="toggleTracking">{{state == 0 ? "Start tracking" : "Stop tracking"}}</button>
+            <button class="button" @click="toggleTracking">
+                <span class="icon is-small">
+                    <i class="fas fa-play" v-if="state == 0"></i>
+                    <i class="fas fa-stop" v-else></i>
+                </span>
+                <span>{{state == 0 ? "Start tracking" : "Stop tracking"}}</span>
+            </button>
+        </div>
+        <div id="timetrackr-stats">
+            Time tracked today: {{formatDuration(timeTrackedToday)}}
         </div>
         <RecentHistory></RecentHistory>
     </div>
@@ -32,13 +41,15 @@ export default {
     computed: {
         state: function() {
             return this.$store.state.state;
+        },
+        timeTrackedToday: function() {
+            return this.$store.getters.timeTrackedToday;
         }
     },
     mounted: function() {
         this.updateDateAndTime(new Date());
         var self = this;
         setInterval(function() {
-            self.updateTime();
             if (self.state == 1) {
                 self.display = self.formatDuration(self.calculateDuration(self.$store.state.tracking.start))
             }
@@ -122,5 +133,9 @@ export default {
 
 #timetrackr-ctrl button {
     float: right;
+}
+
+#timetrackr-stats {
+    padding: 6px;
 }
 </style>

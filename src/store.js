@@ -24,5 +24,15 @@ export default new Vuex.Store({
             state.history = [];
         }
     },
+    getters: {
+        timeTrackedToday: function(state) {
+            var timeTrackedToday = 0;
+            var todaysHistory = state.history.filter(entry => entry.date == new Date().toLocaleDateString());
+            for (let i = 0; i < todaysHistory.length; i++) {
+                timeTrackedToday += todaysHistory[i].duration;
+            }
+            return timeTrackedToday;
+        }
+    },
     plugins: [createPersistedState()]
 });
