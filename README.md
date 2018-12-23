@@ -20,12 +20,15 @@ npm run build
 TODOs:
 
 - [x] Better display of durations
-- [ ] Display tracked time for today
 - [x] Move state to Vuex
     - [x] Persist state to Web Storage
     - [x] Decompose UI in different components
 - [x] Only display last n entries in history
-    - [ ] Offer option to review full history
-- [ ] Analyze history: tracked time per day/week/month
+    - [x] Offer option to review full history
+- [ ] Modify behaviour on change of day: split tracked time into several time spans
+- [ ] Process/format history data per day/week/month
+    - [ ] Organize full history by month
+    - [ ] Display tracked time for today/this week on main page
 - [ ] Host on Github pages
     - [ ] Add Github page link in navbar
+- [ ] Fix tracking display delay on component load

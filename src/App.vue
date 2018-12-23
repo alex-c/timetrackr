@@ -4,7 +4,9 @@
             <div class="navbar-brand">
                 <div class="navbar-item" >
                     <span id="navbar-title-icon" class="icon is-large"><i class="far fa-clock fa-2x"></i></span>
-                    <span id="navbar-title">timetrackr</span>
+                    <router-link to="/">
+                        <span id="navbar-title">timetrackr</span>
+                    </router-link>
                 </div>
                 <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                     <span aria-hidden="true"></span>
@@ -14,6 +16,12 @@
             </div>
             <div id="navbar" class="navbar-menu">
                 <div class="navbar-end">
+                    <div class="navbar-item" v-if="displayTracking()">
+                        <div id="timetrackr-nav">
+                            <span class="icon"><i class="far fa-clock"></i></span>
+                            <span id="timetrackr-nav-display">{{display}}</span>
+                        </div>
+                    </div>
                     <div class="navbar-item">
                         <div class="buttons">
                             <a class="button is-link" href="" disabled>
@@ -31,13 +39,30 @@
 </template>
 
 <script>
+import formatDurationMixin from './mixins/formatDuration.js';
 import Timetrackr from './components/Timetrackr.vue';
 
 export default {
     name: 'App',
-    components: {Timetrackr},
+    mixins: [formatDurationMixin],
     data: function() {
-        return {}
+        return {
+            display: ''
+        }
+    },
+    mounted: function() {
+        var self = this;
+        setInterval(function() {
+            if (self.displayTracking()) {
+                let trackedDurationInSeconds = parseInt((Date.now() - self.$store.state.tracking.start) / 1000);
+                self.display = self.formatDuration(trackedDurationInSeconds)
+            }
+        }, 1000);
+    },
+    methods: {
+        displayTracking: function() {
+            return this.$router.currentRoute.path != '/' && this.$store.state.state == 1;
+        }
     }
 }
 </script>
@@ -68,14 +93,27 @@ body {
     top: -4px;
 }
 
+.navbar a {
+    text-decoration: none;
+}
+
 #navbar-title-icon {
     color: $color-dark;
     text-shadow: 1px 1px 1px black;
+    margin-right: 12px;
+}
+
+#timetrackr-nav .icon {
     margin-right: 6px;
 }
 
+#timetrackr-nav-display {
+    position: relative;
+    top: -1px;
+}
+
 #content-container {
-    width: 600px;
+    width: 800px;
     padding-top: 60px;
     margin: auto;
     text-align: left;

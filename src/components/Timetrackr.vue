@@ -9,23 +9,23 @@
             <span id="tracking-display">{{display}}</span>
             <button class="button" @click="toggleTracking">{{state == 0 ? "Start tracking" : "Stop tracking"}}</button>
         </div>
-        <History></History>
+        <RecentHistory></RecentHistory>
     </div>
 </template>
 
 <script>
 import formatDurationMixin from '../mixins/formatDuration.js';
-import History from './History.vue';
+import RecentHistory from './RecentHistory.vue';
 
 export default {
     name: 'Timetrackr',
-    components: {History},
+    components: {RecentHistory},
     mixins: [formatDurationMixin],
     data: function() {
         return {
             date: '',
             time: '',
-            display: ''
+            display: '-'
         }
     },
     computed: {
@@ -68,7 +68,7 @@ export default {
                 this.$store.state.tracking.stop = Date.now();
                 this.$store.commit('setTrackingState', 0);
                 this.pushToHistory(this.$store.state.tracking);
-                this.display = '';
+                this.display = '-';
             }
         },
         pushToHistory: function(tracking) {
@@ -111,7 +111,7 @@ export default {
 #timetrackr-ctrl {
     background: $color-dark;
     border-radius: 3px;
-    padding: 20px;
+    padding: 30px;
     overflow: auto;
     color: white;
     box-shadow: 1px 1px 2px 0px black;

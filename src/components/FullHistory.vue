@@ -1,13 +1,13 @@
 <template>
-    <div id="history">
-        <div id="history-header">
-            <span id="history-title">History</span>
-            <button class="button is-small" @click="clearHistory">
+    <div id="full-history">
+        <div id="full-history-header">
+            <span id="full-history-title">History</span>
+            <button class="button is-small is-danger" @click="clearHistory">
                 <span class="icon is-small"><i class="fas fa-trash"></i></span>
-                <span>Clear</span>
+                <span>Clear history</span>
             </button>
         </div>
-        <table class="table is-fullwidth">
+        <table class="table is-fullwidth is-striped">
             <thead>
                 <tr>
                     <td>Date</td>
@@ -32,14 +32,14 @@
 import formatDurationMixin from '../mixins/formatDuration.js';
 
 export default {
-    name: 'History',
+    name: 'FullHistory',
     mixins: [formatDurationMixin],
     data: function() {
         return {};
     },
     computed: {
         history: function() {
-            return this.$store.state.history.slice(0, 10);
+            return this.$store.state.history;
         }
     },
     methods: {
@@ -56,22 +56,18 @@ export default {
 @import "bulma/sass/elements/button.sass";
 @import "bulma/sass/elements/table.sass";
 
-#history {
-    margin-top: 40px;
-}
-
-#history-header {
+#full-history-header {
     margin-bottom: 4px;
 }
 
-#history-header button {
+#full-history-header button {
     float: right;
     position: relative;
-    bottom: -3px;
+    top: 35px;
 }
 
-#history-title {
-    font-size: 24px;
+#full-history-title {
+    font-size: 48px;
     text-shadow: 1px 1px 1px black;
 }
 
